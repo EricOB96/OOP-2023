@@ -16,6 +16,11 @@ public class Main
 		Dog penny = new Dog();
 		penny.setName("Penny");
 		penny.speak();
+
+		Cat ginger = new Cat();
+		ginger.setName("Ginger");
+		ginger.setLives(9);
+		ginger.Kill();
 	}
 	
 }
