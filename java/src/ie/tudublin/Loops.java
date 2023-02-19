@@ -2,140 +2,162 @@ package ie.tudublin;
 
 import processing.core.PApplet;
 
-public class BugZap extends PApplet {
+public class Loops extends PApplet {
+
+	
 	public void settings() {
 		size(1000, 1000);
+        cx = width / 2;
+        cy = height / 2;
 	}
+
+    float cx;
+    float cy;
+
+    int mode = 0;
 
 	public void setup() {
-		reset();
+
+        colorMode(HSB);
+        
 	}
 
-	float playerX, playerY;
-	float playerSpeed = 5;
-	float playerWidth = 40;
-	float halfPlayerWidth = playerWidth / 2;
 
-	float bugX, bugY, bugWidth = 100;
-	float halfBugWidth = bugWidth / 2;
-
-	int score = 0;
-
-	void reset() {
-		resetBug();
-		playerX = width / 2;
-		playerY = height - 50;
-	}
-
-	void resetBug() {
-		bugX = random(halfBugWidth, width - halfBugWidth);
-		bugY = 50;
-	}
-
-	void drawBug(float x, float y) {
-		// Draw the bug
-		stroke(255);
-		float saucerHeight = bugWidth * 0.7f;
-		line(x, y - saucerHeight, x - halfBugWidth, y);
-		line(x, y - saucerHeight, x + halfBugWidth, y);
-		// line(x - halfBugWidth, y, x - halfBugWidth, y);
-		line(x - halfBugWidth, y, x + halfBugWidth, y);
-		float feet = bugWidth * 0.1f;
-		line(x - feet, y, x - halfBugWidth, y + halfBugWidth);
-		line(x + feet, y, x + halfBugWidth, y + halfBugWidth);
-
-		feet = bugWidth * 0.3f;
-		line(x - feet, y, x - halfBugWidth, y + halfBugWidth);
-		line(x + feet, y, x + halfBugWidth, y + halfBugWidth);
-
-		float eyes = bugWidth * 0.1f;
-		line(x - eyes, y - eyes, x - eyes, y - eyes * 2f);
-		line(x + eyes, y - eyes, x + eyes, y - eyes * 2f);
-
-	}
-
-	void drawPlayer(float x, float y, float w) {
-		stroke(255);
-		float playerHeight = w / 2;
-		line(x - halfPlayerWidth, y + playerHeight, x + halfPlayerWidth, y + playerHeight);
-		line(x - halfPlayerWidth, y + playerHeight, x - halfPlayerWidth, y + playerHeight * 0.5f);
-		line(x + halfPlayerWidth, y + playerHeight, x + halfPlayerWidth, y + playerHeight * 0.5f);
-
-		line(x - halfPlayerWidth, y + playerHeight * 0.5f, x - (halfPlayerWidth * 0.8f), y + playerHeight * 0.3f);
-		line(x + halfPlayerWidth, y + playerHeight * 0.5f, x + (halfPlayerWidth * 0.8f), y + playerHeight * 0.3f);
-
-		line(x - (halfPlayerWidth * 0.8f), y + playerHeight * 0.3f, x + (halfPlayerWidth * 0.8f),
-				y + playerHeight * 0.3f);
-
-		line(x, y, x, y + playerHeight * 0.3f);
-
-	}
 
 	public void keyPressed() {
-		
-		if (keyCode == LEFT) {
-			if (playerX > halfPlayerWidth) {
-				playerX -= playerSpeed;
-			}
-		}
-		if (keyCode == RIGHT) {
-			if (playerX < width - halfPlayerWidth) {
-				playerX += playerSpeed;
-			}
-		}
-		if (keyCode == ' ')
-		{
-			if (playerX > bugX - halfBugWidth && playerX < bugX + halfBugWidth)
-			{
-				line(playerX, playerY, playerX, bugY);
-				score ++;
-				resetBug();
-			}
-			else
-			{
-				line(playerX, playerY, playerX, 0);
-			}
-		}
+		if(keyCode >= '0' && keyCode <= '9')
+        {
+            mode = key - '0';
+            println(mode);
+        }
 	}
 
-	void moveBug() {
-		if ((frameCount % 30) == 0) {
-			bugX += random(-5, 5);
-			if (bugX < halfBugWidth) {
-				bugX = halfBugWidth;
-			}
-			if (bugX > width - halfBugWidth) {
-				bugX = width - halfBugWidth;
-			}
-			bugY += 2;
-		}
-	}
-
-	int gameMode = 0;
 
 	public void draw() {
 		background(0);
-		fill(255);
-		text("Score: " + score, 50, 100);
-		if (gameMode == 0)
-		{
-			fill(255);
-			drawPlayer(playerX, playerY, playerWidth);
-			drawBug(bugX, bugY);
-			moveBug();
+		noStroke();
+		
+        switch (mode)
+        {
+            case 0:
+            {
+                float w = 200;
+                float h = 50;
+                rectMode(CENTER);
 
-			text("Score: " + score, 20, 20);
-		}
-		else
-		{
-			textAlign(CENTER, CENTER);
-			text("GAME OVER!!!", width / 2, height / 2);
-		}
+                if(mouseX > cx - (w/2) && mouseX < cx + (w/2) && mouseY > cy - (h/2) && mouseY < cy + (h/2))
+                {
+                    fill(50,255,255);
+                }
+                else{
+                    fill(200,255,255);
+                }
 
-		if (bugY > height - 50)
-		{
-			gameMode = 1;
-		}
+                rect(cx, cy, w, h);
+
+                break;
+            }
+
+            case 1:
+            {
+                fill(50,147,255);
+                
+
+                if(mouseX < cx  && mouseY < cy)
+                {
+                    rect(0,0,cx,cy);
+                }
+                else if(mouseX > cx && mouseY < cy)
+                {
+                    rect(cx,0,cx,cy);
+                }
+                else if(mouseX < cx && mouseY > cy)
+                {
+                    rect(0,cy,cx,cy);
+                }
+                else
+                {
+                    rect(cx,cy,cx,cy);
+                }
+
+                break;
+            }
+
+            case 2:
+            {
+                int i = 0;
+                int numRectangles = (int)(mouseX / 10.0f);
+                float w = width /  (float)numRectangles;
+                float gap = 255 /  (float)numRectangles;
+
+                for( i = 0; i < numRectangles; i++)
+                {
+                    fill(i * gap, 255, 255);
+                    rect(i * w, 0, w, height);
+                }
+
+                break;
+
+            }
+
+            case 3:
+            {
+                rectMode(CORNER);
+                int i = 0;
+                int numSquares = (int) mouseX / 10;
+                float w = width / (float)numSquares;
+                float gap = 255 / (float)numSquares;
+
+                for(i = 0; i < numSquares; i++)
+                {
+                    fill(i * gap, 255, 255);
+                    rect(i * w, i * w, w, w);
+                }
+
+                break;
+
+            }
+
+            case 4:
+            {
+                rectMode(CORNER);
+                int i = 0;
+                int numSquares = (int)mouseX / 10;
+                float w = width / (float)numSquares;
+                float gap = 255 / (float)numSquares;
+
+                for(i = 0; i < numSquares; i++)
+                {
+                    fill(i * gap, 255, 255);
+                    rect(i * w, i * w, w, w);
+                    rect(width - ((i + 1) * w), i *w, w, w);
+                }
+
+                break;
+
+            }
+
+            case 5:
+            {
+                int i = 0;
+                int numCircles = (int)(mouseX / 10.0f);
+                float w = width / (float) numCircles;
+                float gap = 255 / (float) numCircles;
+
+                for(i = 0; i < numCircles; i ++)
+                {
+                    fill(i * gap, 255, 255);
+                    ellipse(w / 2 + (i * w), cy, w, w);
+                }
+
+                break;
+
+            }
+        }
+		
+		
 
 	}
 }
+
+
