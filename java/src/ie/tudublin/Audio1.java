@@ -47,7 +47,7 @@ public class Audio1 extends PApplet
         // ab = ai.mix; 
 
         // And comment the next two lines out
-        ap = minim.loadFile("heroplanet.mp3", 1024);
+        ap = minim.loadFile("TameImpala_newPerson.mp3", 1024);
         ap.play();
         ab = ap.mix;
         colorMode(HSB);
@@ -74,7 +74,7 @@ public class Audio1 extends PApplet
         }
         average= sum / (float) ab.size();
 
-        smoothedAmplitude = lerp(smoothedAmplitude, average, 0.1f);
+        smoothedAmplitude = lerp(smoothedAmplitude, average, 10f);
         
         float cx = width / 2;
         float cy = height / 2;
@@ -91,9 +91,10 @@ public class Audio1 extends PApplet
                     line(i, halfH + f, i, halfH - f);                    
                 }
                 break;
-        case 1:
-            background(0);            
-            break;
+            case 1:
+                background(0);   
+                        
+                break;
 
         }
         
