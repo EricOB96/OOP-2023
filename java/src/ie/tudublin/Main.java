@@ -50,7 +50,7 @@ public class Main
 		penny.setName("Penny");
 		penny.speak();
 
-		Audio2();
+		audio1();
 
 		
 	}
